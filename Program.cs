@@ -2,6 +2,10 @@
 //using SuperConvert.Extensions;
 //using SuperConvert.Files;
 using SuperConvert.Files.Extensions;
+using System.IO;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
 
 namespace Super_Convert_Example
 {
@@ -10,8 +14,29 @@ namespace Super_Convert_Example
         static void Main(string[] args)
         {
             //Console.WriteLine("Hello World!");
-            string jsonFromCsv = ExcelConverter.CsvToJson("D:\\Projects\\Superconvertexample\\Super-Convert-Example\\sample.csv");
+            CallSuperConvert();
+            ConvertToJson();
             
+        }
+
+        public static void ConvertToJson()
+        {
+            var lines = System.IO.File.ReadLines("D:\\Projects\\Superconvertexample\\Super-Convert-Example\\sample.csv");
+            var csv = new List<string[]>();
+            foreach(string line in lines)
+            {
+                csv.Add(line.Split(','));
+            }
+            string jsonFromCsv = JsonConvert.SerializeObject(csv, Formatting.Indented);
+            
+
+            Console.WriteLine(jsonFromCsv);
+        }
+
+        public static void CallSuperConvert()
+        {
+            string jsonFromCsv = ExcelConverter.CsvToJson("D:\\Projects\\Superconvertexample\\Super-Convert-Example\\sample.csv");
+
 
             Console.WriteLine(jsonFromCsv);
         }
