@@ -11,4 +11,10 @@
     <PackageReference Include="SuperConvert.Files" Version="1.0.3.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="sample.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

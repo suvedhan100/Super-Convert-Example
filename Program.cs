@@ -21,7 +21,7 @@ namespace Super_Convert_Example
 
         public static void ConvertToJson()
         {
-            var lines = System.IO.File.ReadLines("D:\\Projects\\Superconvertexample\\Super-Convert-Example\\sample.csv");
+            var lines = System.IO.File.ReadLines(@"..\sample.csv");
             var csv = new List<string[]>();
             foreach(string line in lines)
             {
@@ -35,7 +35,7 @@ namespace Super_Convert_Example
 
         public static void CallSuperConvert()
         {
-            string jsonFromCsv = ExcelConverter.CsvToJson("D:\\Projects\\Superconvertexample\\Super-Convert-Example\\sample.csv");
+            string jsonFromCsv = ExcelConverter.CsvToJson(@"..\sample.csv");
 
 
             Console.WriteLine(jsonFromCsv);
