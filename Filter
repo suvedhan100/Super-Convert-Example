@@ -1,0 +1,91 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
+class Program
+{
+    static void Main()
+    {
+        // Sample data
+        List<MyObject> data = new List<MyObject>
+        {
+            new MyObject { Name = "John", Age = 30 },
+            new MyObject { Name = "Alice", Age = 25 },
+            new MyObject { Name = "Bob", Age = 35 },
+        };
+
+        // Define conditions (column name, operator, value)
+        List<Condition> conditions = new List<Condition>
+        {
+            new Condition("Name", "Alice", ConditionOperator.Equal),
+            new Condition("Age", 30, ConditionOperator.LessThan),
+        };
+
+        // Apply conditions dynamically
+        var filteredData = data.Where(item =>
+        {
+            foreach (var condition in conditions)
+            {
+                PropertyInfo property = item.GetType().GetProperty(condition.ColumnName);
+                if (property == null)
+                {
+                    throw new ArgumentException($"Property {condition.ColumnName} not found.");
+                }
+                var propertyValue = property.GetValue(item);
+                bool conditionMet = false;
+
+                switch (condition.Operator)
+                {
+                    case ConditionOperator.Equal:
+                        conditionMet = propertyValue.Equals(condition.Value);
+                        break;
+                    case ConditionOperator.LessThan:
+                        conditionMet = (int)propertyValue < (int)condition.Value;
+                        break;
+                    // Add more cases for other operators (e.g., GreaterThan, NotEqual)
+                }
+
+                if (!conditionMet)
+                {
+                    return false; // If any condition is not met, exclude the item
+                }
+            }
+
+            return true; // All conditions were met
+        });
+
+        // Display the filtered data
+        foreach (var item in filteredData)
+        {
+            Console.WriteLine($"Name: {item.Name}, Age: {item.Age}");
+        }
+    }
+}
+
+class MyObject
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+
+class Condition
+{
+    public string ColumnName { get; }
+    public object Value { get; }
+    public ConditionOperator Operator { get; }
+
+    public Condition(string columnName, object value, ConditionOperator op)
+    {
+        ColumnName = columnName;
+        Value = value;
+        Operator = op;
+    }
+}
+
+enum ConditionOperator
+{
+    Equal,
+    LessThan,
+    // Add more operators as needed (e.g., GreaterThan, NotEqual)
+}
